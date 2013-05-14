@@ -1,0 +1,14 @@
+* Sina NBA Live Indicator
+** Overview
+This is an ubuntu indicator for the Sina NBA Live service.
+** Get Started
+Open a terminal and type:
+: python SinaNBALive-indicator.py
+
+Enjoy yourself!
+** Future Work
+This script does not use PyGTK. Instead, it uses GTK+3 through the PyGObject
+bindings. It seems there are some bugs which make me unable to modify some user
+interface for the menu item. In the future, I will focus on improving the GUI if
+I have time because I think the basic functions of this indicator are quite
+simple and have been almost implemented in current version.
