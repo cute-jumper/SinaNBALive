@@ -218,10 +218,10 @@ class NBALiveIndicator(object):
                 self.dynamic_menu_item_setup()
             else:
                 self.dynamic_menu_item_update()
+            self.ind.set_status(appindicator.IndicatorStatus.ACTIVE)
             if len(filter(lambda x: x.status != 'Final', self.games)) == 0:
                 self.need_update = False
-                self.ind.set_status(appindicator.IndicatorStatus.ACTIVE)
-            else:
+            elif len(filter(lambda x: x.status == 'In-Progress', self.games)) > 0:
                 self.ind.set_status(appindicator.IndicatorStatus.ATTENTION)
         else:
             if new_today_string > self.today_string:
