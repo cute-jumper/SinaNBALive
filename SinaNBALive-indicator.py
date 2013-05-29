@@ -127,7 +127,7 @@ class GameMenuItem(object):
         elif status == 'Final' and len(self.game.game_report) > 1:
             webbrowser.open(self.game.game_report)
         else:
-            webbrowser.open(text_live_url + game.game_id)
+            webbrowser.open(text_live_url + self.game.game_id)
             
 def make_temp_image(visiting_en, home_en):
     visiting_gif = Image.open(os.path.join(app_gif_dir, visiting_en) + '.gif')
@@ -208,26 +208,22 @@ class NBALiveIndicator(object):
     def do_update(self):
         print '\033[0;32m[Message]: \033[0mupdate'
         new_today_string = get_today_string()
+        update_func = self.dynamic_menu_item_update
+        if new_today_string > self.today_string:
+            self.today_string = new_today_string
+            for i in self.game_menu_item_list:
+                for j in i.get_game_menu_items():
+                    self.menu.remove(j)
+            update_func = self.dynamic_menu_item_setup
+            self.need_update = True
         if self.need_update:
             self.games = get_today_games()
-            if new_today_string > self.today_string:
-                self.today_string = new_today_string
-                for i in self.game_menu_item_list:
-                    for j in i.get_game_menu_items():
-                        self.menu.remove(j)
-                self.dynamic_menu_item_setup()
-            else:
-                self.dynamic_menu_item_update()
+            update_func()
             self.ind.set_status(appindicator.IndicatorStatus.ACTIVE)
             if len(filter(lambda x: x.status != 'Final', self.games)) == 0:
                 self.need_update = False
             elif len(filter(lambda x: x.status == 'In-Progress', self.games)) > 0:
                 self.ind.set_status(appindicator.IndicatorStatus.ATTENTION)
-        else:
-            if new_today_string > self.today_string:
-                self.today_string = new_today_string
-                self.need_update = True
-                self.do_update()
         return True
 
 if __name__ == '__main__':
