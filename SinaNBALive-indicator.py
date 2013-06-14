@@ -54,6 +54,14 @@ class Game(object):
             
     def get_game_status_zh(self):
         return game_status_zh[self.status]
+    
+    def compact_game_info(self):
+        if self.status == "In-Progress" or self.status == "Final":            
+            return "[%s] %s %s : %s %s" %(game_status_zh[self.status],
+                                          self.visiting_en,
+                                          self.visiting_score,
+                                          self.home_score,
+                                          self.home_en)
 
 def get_today_games():
     js = urllib2.urlopen(nbalive_url).read()
@@ -206,7 +214,7 @@ class NBALiveIndicator(object):
         Gtk.main()
         
     def do_update(self):
-        print '\033[0;32m[Message]: \033[0mupdate'
+        print '\033[0;32m[Message]: \033[0mcall do_update'
         new_today_string = get_today_string()
         update_func = self.dynamic_menu_item_update
         if new_today_string > self.today_string:
@@ -218,6 +226,8 @@ class NBALiveIndicator(object):
             self.need_update = True
         if self.need_update:
             self.games = get_today_games()
+            print '\033[0;32m[Message]: \033[0mupdate!'
+            print '\n'.join(game.compact_game_info() for game in self.games)
             update_func()
             self.ind.set_status(appindicator.IndicatorStatus.ACTIVE)
             if len(filter(lambda x: x.status != 'Final', self.games)) == 0:
