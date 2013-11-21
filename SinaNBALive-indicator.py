@@ -141,7 +141,7 @@ def make_temp_image(visiting_en, home_en):
     visiting_gif = Image.open(os.path.join(app_gif_dir, visiting_en) + '.gif')
     home_gif = Image.open(os.path.join(app_gif_dir, home_en) + '.gif')
     vs = Image.open(os.path.join(app_gif_dir, 'vs.gif'))
-    new_im = Image.new('RGB', (80, 80))
+    new_im = Image.new('RGB', (80, 80), color=(48,199,251,0))
     new_im.paste(visiting_gif, (0, 0))
     new_im.paste(home_gif, (30, 40))
     new_im.paste(vs, (25, 30))
